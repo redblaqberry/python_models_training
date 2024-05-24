@@ -1,5 +1,7 @@
-torch==1.11.0
-torchvision==0.12.0
+torch==1.12.0
+torchvision==0.13.0
 numpy==1.22.3
 tqdm==4.64.0
+pillow==8.4.0
+timm==0.5.4
 torchsummary==1.5.1
