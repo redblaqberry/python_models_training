@@ -8,6 +8,12 @@ Original file is located at
 """
 
 import os
+
+NUM_WORKERS = 20
+os.environ['MKL_NUM_THREADS'] = str(NUM_WORKERS)
+os.environ['NUMEXPR_NUM_THREADS'] = str(NUM_WORKERS)
+os.environ['OMP_NUM_THREADS'] = str(NUM_WORKERS)
+os.environ["CUDA_VISIBLE_DEVICES"] = str(0)
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -20,15 +26,9 @@ import numpy as np
 from PIL import Image
 from torch.optim import lr_scheduler
 
-# Set number of workers
-NUM_WORKERS = 20
-os.environ['MKL_NUM_THREADS'] = str(NUM_WORKERS)
-os.environ['NUMEXPR_NUM_THREADS'] = str(NUM_WORKERS)
-os.environ['OMP_NUM_THREADS'] = str(NUM_WORKERS)
-os.environ["CUDA_VISIBLE_DEVICES"] = str(0)
 
 # Create directories
-Path('/sub_folder').mkdir(parents=True, exist_ok=True)
+Path('./sub_folder').mkdir(parents=True, exist_ok=True)
 
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -57,8 +57,8 @@ transform_test = transforms.Compose([
 ])
 
 # Path to your Tiny ImageNet data
-train_dir = '/tiny-imagenet-200/train'
-val_dir = '/tiny-imagenet-200/val'
+train_dir = './tiny-imagenet-200/train'
+val_dir = './tiny-imagenet-200/val'
 
 # Load datasets using ImageFolder for training data
 trainset = datasets.ImageFolder(root=train_dir, transform=None)  # No transform here
@@ -229,6 +229,6 @@ for percentage_to_change in range(0, 101, 10):
         'learning_rate': optimizer.param_groups[0]["lr"]
     }
 
-    torch.save(training_stats, f"/sub_folder/tinyimagenet_trigger_resnet18_{percentage_to_change}.pth")
+    torch.save(training_stats, f"./sub_folder/tinyimagenet_trigger_resnet18_{percentage_to_change}.pth")
 
 print("All training completed.")
