@@ -7,6 +7,12 @@ Original file is located at
     https://colab.research.google.com/drive/1ZIw4znzpijH5IkBXcAfuTbTDoyivU6FH
 """
 
+import os
+NUM_WORKERS = 20
+os.environ['MKL_NUM_THREADS'] = str(NUM_WORKERS)
+os.environ['NUMEXPR_NUM_THREADS'] = str(NUM_WORKERS)
+os.environ['OMP_NUM_THREADS'] = str(NUM_WORKERS)
+os.environ["CUDA_VISIBLE_DEVICES"] = str(0)
 import torch
 from torch.utils.data import DataLoader
 import torchvision.transforms as transforms
@@ -19,15 +25,9 @@ from tqdm import tqdm
 from pathlib import Path
 import timm
 
-import os
-NUM_WORKERS = 20
-os.environ['MKL_NUM_THREADS'] = str(NUM_WORKERS)
-os.environ['NUMEXPR_NUM_THREADS'] = str(NUM_WORKERS)
-os.environ['OMP_NUM_THREADS'] = str(NUM_WORKERS)
-os.environ["CUDA_VISIBLE_DEVICES"] = str(0)
 
 # Create directories
-Path('/sub_folder').mkdir(parents=True, exist_ok=True)
+Path('./sub_folder').mkdir(parents=True, exist_ok=True)
 
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -165,4 +165,4 @@ for percentage_to_change in range(0, 101, 10):
         'learning_rate': optimizer.param_groups[0]["lr"]
     }
 
-    torch.save(training_stats, f"/sub_folder/cifar10_label_effnetv2_b0_{percentage_to_change}.pth")
+    torch.save(training_stats, f"./sub_folder/cifar10_label_effnetv2_b0_{percentage_to_change}.pth")
