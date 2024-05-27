@@ -7,6 +7,14 @@ Original file is located at
     https://colab.research.google.com/drive/1ZIw4znzpijH5IkBXcAfuTbTDoyivU6FH
 """
 
+
+import os
+# Set number of workers
+NUM_WORKERS = 20
+os.environ['MKL_NUM_THREADS'] = str(NUM_WORKERS)
+os.environ['NUMEXPR_NUM_THREADS'] = str(NUM_WORKERS)
+os.environ['OMP_NUM_THREADS'] = str(NUM_WORKERS)
+os.environ["CUDA_VISIBLE_DEVICES"] = str(0)
 # Commented out IPython magic to ensure Python compatibility.
 import torch
 from PIL import Image
@@ -24,7 +32,6 @@ warnings.filterwarnings('ignore')
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 print(f'Using {device} for inference')
 torch.manual_seed(42)
-import os
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -38,18 +45,12 @@ import numpy as np
 from pathlib import Path
 from torch.optim import lr_scheduler
 
-# Set number of workers
-NUM_WORKERS = 20
-os.environ['MKL_NUM_THREADS'] = str(NUM_WORKERS)
-os.environ['NUMEXPR_NUM_THREADS'] = str(NUM_WORKERS)
-os.environ['OMP_NUM_THREADS'] = str(NUM_WORKERS)
-os.environ["CUDA_VISIBLE_DEVICES"] = str(0)
 
 # Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Create directories
-Path('/sub_folder').mkdir(parents=True, exist_ok=True)
+Path('./sub_folder').mkdir(parents=True, exist_ok=True)
 
 # Set random seed for reproducibility
 torch.manual_seed(42)
@@ -73,8 +74,8 @@ test_transform = transforms.Compose([
 ])
 
 # Path to your Tiny ImageNet data
-train_dir = '/tiny-imagenet-200/train'
-val_dir = '/tiny-imagenet-200/val'
+train_dir = './tiny-imagenet-200/train'
+val_dir = './tiny-imagenet-200/val'
 
 # Load datasets using ImageFolder for training data
 trainset = datasets.ImageFolder(root=train_dir)
@@ -230,7 +231,7 @@ for percentage_to_change in range(0, 101, 10):
             scheduler.step()
 
     # Save model checkpoint after all epochs are completed for each corruption percentage
-    model_save_path = f'/sub_folder/efficientnetv2_pct_{percentage_to_change}.pth'
+    model_save_path = f'./sub_folder/efficientnetv2_pct_{percentage_to_change}.pth'
     torch.save({
         'epoch': num_epochs,
         'model_state_dict': model.state_dict(),
